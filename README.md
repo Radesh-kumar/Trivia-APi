@@ -55,7 +55,7 @@ One note before you delve into your tasks: for each endpoint you are expected to
 #### GET '/categories'
 Return all categories
 - Sample:  `curl http://127.0.0.1:5000/categories`
-'''json
+```json
 {
   "all_categories": 6, 
   "categories": {
@@ -68,11 +68,11 @@ Return all categories
   }, 
   "success": true
 }
-'''
+```
 #### GET '/categories/<int:id>/questions'
 Return questions based on category
 - Sample:`curl http://127.0.0.1:5000/categories/1/questions -X GET`
-'''json
+```json
 {
   "current_category": "Science", 
   "questions": [
@@ -130,11 +130,11 @@ Return questions based on category
   "total_questions": 7
 }
 
-'''
+```
 #### GET '/questions'
 Returning Question with pagination=10
 - Sample: `curl http://127.0.0.1:5000/questions`<br>
-'''json
+```json
 {
   "categories": {
     "1": "Science", 
@@ -219,11 +219,11 @@ Returning Question with pagination=10
   ], 
   "total_questions": 32
 }
-''' 
+``` 
 #### POST '/questions/add'
 Adding new question
 - Sample: `curl http://127.0.0.1:5000/questions/add -X POST -H "Content-Type: application/json" -d '{"question":"TestQuestion","answer":"TestAnswer","category":"5","difficulty":"5"}'`
-'''json
+```json
 {
   "question_id": 39, 
   "questions": [
@@ -302,21 +302,21 @@ Adding new question
   "total_questions": 31
 }
 
-'''
+```
 ### DELETE '/questions/<int:question_id>'
 Deleting a question using id
 - Sample: `curl http://127.0.0.1:5000/questions/6 -X DELETE` 
-'''json
+```json
 {
   "deleted_id": 6, 
   "success": true
 }
 
-'''
+```
 #### POST '/questions/search'
 Searching Questions
 - Sample: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm":"who are you"}'`
-'''json
+```json
 {
   "current_category": "None", 
   "questions": [
@@ -346,7 +346,7 @@ Searching Questions
   "total_questions": 3
 }
 
-''' 
+``` 
 ## Testing
 To run the tests, run
 ```
