@@ -40,7 +40,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
 
     def test_return_invalid_category_id(self):
-        res = self.client().get('/categories/1987/questions')
+        res = self.client().get('/categories/19887/questions')
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
@@ -119,7 +119,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(len(data['questions']), 1)
     
     def test_search_fail_case(self):
-        request_data = {'searchTerm': 'dfjdtrertwfresyg346474yg',}
+        request_data = {'searchTerm': 'dfjdtrergrdgrdgdrg',}
         res = self.client().post('/questions/search', json=request_data)
         data = json.loads(res.data)
         self.assertNotEqual(res.status_code, 404)
@@ -140,11 +140,17 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['question'])
     
     def test_play_quiz_fail_case(self):
-        res = self.client().post('/quizzes', json={})
+        request_data = {
+            'previous_questions': [5, 9],
+            'quiz_category': {
+                'type': 'History',
+                'id': 4
+            }
+            }
+        res = self.client().post('/play', json=request_data)
         data = json.loads(res.data)
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'resource not found')
+        self.assertNotEqual(res.status_code, 404)
+        self.assertNotEqual(data['success'], False)
 
 
 # Make the tests conveniently executable
