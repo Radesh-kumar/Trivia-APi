@@ -39,6 +39,13 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['categories'])
 
+    def test_return_invalid_category_id(self):
+        res = self.client().get('/categories/1987/questions')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'resource not found')
+
     def test_return_questions(self):
         res = self.client().get('/questions')
         data = json.loads(res.data)
@@ -46,6 +53,13 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_questions'])
         self.assertTrue(data['questions'])
         self.assertEqual(len(data['questions']), 10)
+
+    def test_return_questions_failure_case(self):
+        res = self.client().get('/quesion')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False) 
+        self.assertEqual(data['message'], 'resource not found') 
 
     #After runnning scripts We have to chane id manually or else it show F
     def test_delete_question(self):
@@ -91,6 +105,42 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_get_question_by_category_error_404(self):
         res = self.client().get('/categories/100/questions')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'resource not found')
+    
+    def test_search_questions(self):
+        request_data = {'searchTerm': 'largest lake in Africa',}
+        res = self.client().post('/questions/search', json=request_data)
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(len(data['questions']), 1)
+    
+    def test_search_fail_case(self):
+        request_data = {'searchTerm': 'dfjdtrertwfresyg346474yg',}
+        res = self.client().post('/questions/search', json=request_data)
+        data = json.loads(res.data)
+        self.assertNotEqual(res.status_code, 404)
+        self.assertNotEqual(data['success'], False)
+
+    def test_play_quiz(self):
+        request_data = {
+            'previous_questions': [5, 9],
+            'quiz_category': {
+                'type': 'History',
+                'id': 4
+            }
+            }
+        res = self.client().post('/play', json=request_data)
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['question'])
+    
+    def test_play_quiz_fail_case(self):
+        res = self.client().post('/quizzes', json={})
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
